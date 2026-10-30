@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐍 PyContest — ULTRA edition</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ===== ФОН С ЧАСТИЦАМИ ===== */
+#particles-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse at top, #1e293b 0%, #0f172a 50%, #020617 100%);
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #e2e8f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+a { color: #38bdf8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+nav {
+    background: rgba(30, 41, 59, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #334155;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.nav-links { display: flex; gap: 1.2rem; align-items: center; }
+.nav-links a { color: #94a3b8; font-weight: 500; }
+.nav-user {
+    background: #334155;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: #38bdf8;
+}
+.sound-toggle {
+    background: transparent;
+    border: 1px solid #475569;
+    color: #94a3b8;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.sound-toggle:hover { background: #334155; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; }
+.page { display: none; }
+.page.active { display: block; }
+
+.card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1.8rem;
+    margin-bottom: 1.2rem;
+}
+.card h2 { margin-bottom: 0.6rem; }
+.card p { color: #94a3b8; line-height: 1.6; }
+
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.badge-green  { background: #064e3b; color: #34d399; }
+.badge-yellow { background: #713f12; color: #fbbf24; }
+.badge-red    { background: #7f1d1d; color: #f87171; }
+.badge-blue   { background: #1e3a5f; color: #60a5fa; }
+.badge-purple { background: #581c87; color: #c084fc; }
+.badge-pink   { background: #831843; color: #f472b6; }
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.3rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff; }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,102,241,0.4); }
+.btn-success { background: #059669; color: #fff; }
+.btn-success:hover:not(:disabled) { background: #047857; }
+.btn-ghost { background: transparent; color: #94a3b8; border: 1px solid #475569; }
+.btn-ghost:hover { background: #334155; color: #f1f5f9; }
+.btn-sm { padding: 0.35rem 0.8rem; font-size: 0.82rem; }
+
+.form-group { margin-bottom: 1.2rem; }
+.form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; color: #cbd5e1; font-size: 0.9rem; }
+input[type="text"], input[type="email"], input[type="password"],
+input[type="number"], input[type="datetime-local"], textarea, select {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+input:focus, textarea:focus { outline: none; border-color: #6366f1; }
+textarea { min-height: 120px; resize: vertical; }
+
+.code-editor {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.code-editor-header {
+    background: #161b22;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: #8b949e;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.code-editor textarea {
+    background: #0d1117;
+    border: none;
+    color: #c9d1d9;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    padding: 1rem;
+    min-height: 320px;
+    tab-size: 4;
+    width: 100%;
+}
+.code-editor textarea:focus { box-shadow: none; }
+
+table { width: 100%; border-collapse: collapse; }
+th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    background: #0f172a;
+    color: #64748b;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    border-bottom: 1px solid #334155;
+}
+td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; font-size: 0.92rem; }
+
+.status-accepted  { color: #34d399; font-weight: 700; }
+.status-wa        { color: #f87171; font-weight: 700; }
+.status-tle       { color: #fbbf24; font-weight: 700; }
+.status-re        { color: #fb923c; font-weight: 700; }
+
+.result-box {
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1.2rem 0;
+    text-align: center;
+}
+.result-box.ok  { background: linear-gradient(135deg, #064e3b, #065f46); border: 1px solid #10b981; }
+.result-box.fail { background: linear-gradient(135deg, #7f1d1d, #991b1b); border: 1px solid #ef4444; }
+.result-box h3 { font-size: 1.5rem; margin-bottom: 0.3rem; }
+
+.problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+@media (max-width: 900px) { .problem-grid { grid-template-columns: 1fr; } }
+
+.sample-block {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Consolas', monospace;
+    font-size: 0.88rem;
+    white-space: pre-wrap;
+    color: #a5f3fc;
+}
+
+.hero { text-align: center; padding: 3rem 0 2rem; }
+.hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc, #f472b6);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.6rem;
+    animation: gradientShift 4s ease infinite;
+}
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+.hero p { color: #94a3b8; font-size: 1.1rem; }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+.stat-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.3s;
+}
+.stat-card:hover { transform: translateY(-4px); border-color: #475569; }
+.stat-card .num {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.stat-card .label { color: #64748b; font-size: 0.85rem; margin-top: 0.2rem; }
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+.modal-overlay.active { display: flex; }
+.modal {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 450px;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.flex { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+.text-muted { color: #64748b; }
+.text-sm { font-size: 0.85rem; }
+.divider { border: none; border-top: 1px solid #334155; margin: 1.5rem 0; }
+.tag {
+    display: inline-block;
+    background: #334155;
+    color: #94a3b8;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #1e293b;
+    border: 1px solid #334155;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    z-index: 300;
+    animation: slideUp 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+#pyodide-loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.95);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #334155;
+    border-top-color: #38bdf8;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.test-result {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.88rem;
+    font-family: 'Consolas', monospace;
+}
+.test-result.pass { border-left: 3px solid #34d399; }
+.test-result.fail { border-left: 3px solid #f87171; }
+.test-result.err  { border-left: 3px solid #fb923c; }
+
+/* ===== ACHIEVEMENTS ===== */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.achievement {
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+}
+.achievement.unlocked {
+    border-color: #fbbf24;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.15);
+}
+.achievement.locked { opacity: 0.4; filter: grayscale(1); }
+.achievement.secret.unlocked {
+    border-color: #c084fc;
+    background: linear-gradient(135deg, #3b0764, #581c87);
+    box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+}
+.achievement:hover { transform: translateY(-4px); }
+.achievement-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.achievement-name { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem; }
+.achievement-desc { font-size: 0.7rem; color: #94a3b8; }
+.achievement-secret-tag {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 0.6rem;
+    background: #c084fc;
+    color: #1e1b4b;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+/* ===== HEATMAP ===== */
+.heatmap {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    grid-auto-flow: column;
+    grid-auto-columns: 12px;
+    gap: 3px;
+    margin-top: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+.heatmap-day {
+    background: #1e293b;
+    border-radius: 3px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+.heatmap-day:hover { transform: scale(1.3); outline: 1px solid #38bdf8; }
+.heatmap-day.level-1 { background: #064e3b; }
+.heatmap-day.level-2 { background: #047857; }
+.heatmap-day.level-3 { background: #059669; }
+.heatmap-day.level-4 { background: #10b981; }
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar {
+    height: 10px;
+    background: #0f172a;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+    position: relative;
+    overflow: hidden;
+}
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* ===== TIMER ===== */
+.contest-timer {
+    background: linear-gradient(135deg, #1e293b, #334155);
+    border: 1px solid #475569;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.timer-icon { font-size: 1.5rem; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.timer-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: #38bdf8;
+}
+
+/* ===== ACHIEVEMENT POPUP ===== */
+.achievement-popup {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    border: 2px solid #fbbf24;
+    border-radius: 12px;
+    padding: 1.5rem;
+    z-index: 400;
+    animation: slideInRight 0.5s ease;
+    box-shadow: 0 10px 40px rgba(251, 191, 36, 0.3);
+    max-width: 320px;
+}
+.achievement-popup.secret {
+    border-color: #c084fc;
+    box-shadow: 0 10px 40px rgba(192, 132, 252, 0.4);
+}
+@keyframes slideInRight {
+    from { transform: translateX(400px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+.achievement-popup-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem; }
+.achievement-popup-icon { font-size: 2.5rem; }
+.achievement-popup-title { font-size: 0.8rem; color: #fbbf24; font-weight: 700; text-transform: uppercase; }
+.achievement-popup-name { font-size: 1.1rem; font-weight: 800; color: #e2e8f0; }
+.achievement-popup-desc { font-size: 0.85rem; color: #94a3b8; margin-top: 0.3rem; }
+
+/* ===== LEVEL BADGE ===== */
+.level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1e293b;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+/* ===== STREAK ===== */
+.streak-box {
+    background: linear-gradient(135deg, #7c2d12, #9a3412);
+    border: 1px solid #ea580c;
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+.streak-num { font-size: 1.5rem; font-weight: 800; color: #fbbf24; }
+
+/* ===== COMBO ===== */
+.combo-indicator {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    background: linear-gradient(135deg, #7c2d12, #be123c);
+    border: 2px solid #f43f5e;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    z-index: 300;
+    animation: comboPop 0.5s ease;
+    box-shadow: 0 0 30px rgba(244, 63, 94, 0.4);
+    text-align: center;
+    display: none;
+}
+.combo-indicator.active { display: block; }
+@keyframes comboPop {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+.combo-num {
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #fbbf24, #f43f5e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+.combo-label { font-size: 0.75rem; color: #fda4af; text-transform: uppercase; font-weight: 700; }
+.combo-mult { font-size: 0.9rem; color: #fbbf24; font-weight: 700; margin-top: 0.2rem; }
+
+/* ===== PET ===== */
+.pet-container {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));
+    border: 1px solid #334155;
+    border-radius: 12px;
+    margin: 1rem 0;
+    position: relative;
+    overflow: hidden;
+}
+.pet-emoji {
+    font-size: 5rem;
+    display: inline-block;
+    animation: petBounce 2s ease-in-out infinite;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.pet-emoji:hover { transform: scale(1.2) rotate(10deg); }
+@keyframes petBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+.pet-name { font-size: 1.2rem; font-weight: 700; margin-top: 0.5rem; }
+.pet-level { font-size: 0.85rem; color: #94a3b8; }
+.pet-bubble {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #fff;
+    color: #1e293b;
+    padding: 0.4rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    max-width: 200px;
+    animation: bubblePop 0.3s ease;
+}
+@keyframes bubblePop {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+/* ===== ACTIVITY FEED ===== */
+.activity-feed {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+.activity-feed::-webkit-scrollbar { width: 6px; }
+.activity-feed::-webkit-scrollbar-track { background: #0f172a; }
+.activity-feed::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #1e293b;
+    animation: slideIn 0.4s ease;
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.activity-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+.activity-text { font-size: 0.88rem; color: #cbd5e1; flex: 1; }
+.activity-text strong { color: #e2e8f0; }
+.activity-time { font-size: 0.75rem; color: #64748b; }
+
+/* ===== DAILY PROBLEM ===== */
+.daily-problem {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(244, 63, 94, 0.1));
+    border: 2px solid #fbbf24;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+}
+.daily-problem::before {
+    content: '✨';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 8rem;
+    opacity: 0.1;
+}
+.daily-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1e293b;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+.daily-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.3rem; }
+.daily-bonus {
+    display: inline-block;
+    background: rgba(244, 63, 94, 0.2);
+    color: #f43f5e;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
+}
+
+/* ===== HINTS ===== */
+.hint-box {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border: 1px solid #6366f1;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+.hint-box.locked {
+    opacity: 0.6;
+    filter: blur(3px);
+    user-select: none;
+}
+.hint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+.hint-cost {
+    background: #fbbf24;
+    color: #1e293b;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ===== FLOATING POINTS ===== */
+.floating-points {
+    position: fixed;
+    font-size: 2rem;
+    font-weight: 900;
+    pointer-events: none;
+    z-index: 1000;
+    animation: floatUp 1.5s ease-out forwards;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    20% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+    100% { transform: translateY(-150px) scale(1); opacity: 0; }
+}
+
+/* ===== CONFETTI ===== */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    z-index: 1000;
+    pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles-bg"></canvas>
+
+<div id="pyodide-loader">
+    <div class="spinner"></div>
+    <div style="color:#e2e8f0; font-size:1.1rem;">Загружается Python-интерпретатор...</div>
+    <div id="loader-status" style="color:#64748b; font-size:0.9rem;">Инициализация Pyodide</div>
+</div>
+
+<!-- COMBO INDICATOR -->
+<div class="combo-indicator" id="combo-indicator">
+    <div class="combo-num" id="combo-num">0</div>
+    <div class="combo-label">COMBO</div>
+    <div class="combo-mult" id="combo-mult">×1.0</div>
+</div>
+
+<nav>
+    <div class="logo">🐍 PyContest</div>
+    <div class="nav-links">
+        <a href="#" onclick="showPage('home')">Контесты</a>
+        <a href="#" onclick="showPage('profile')">Профиль</a>
+        <a href="#" onclick="showPage('leaderboard-global')">Рейтинг</a>
+        <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="Звук">🔊</button>
+        <span id="pyodide-status" class="tag" style="display:none">⏳ Python</span>
+        <span id="nav-auth"></span>
+    </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+    <div class="container">
+        <div class="hero">
+            <h1>Контесты по Python</h1>
+            <p>Решай задачи, получай ачивки, прокачивай питомца!</p>
+        </div>
+
+        <!-- DAILY PROBLEM -->
+        <div id="daily-problem-slot"></div>
+
+        <div class="stats">
+            <div class="stat-card"><div class="num" id="stat-contests">0</div><div class="label">Контестов</div></div>
+            <div class="stat-card"><div class="num" id="stat-problems">0</div><div class="label">Задач</div></div>
+            <div class="stat-card"><div class="num" id="stat-users">0</div><div class="label">Участников</div></div>
+            <div class="stat-card"><div class="num" id="stat-subs">0</div><div class="label">Отправок</div></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+            <div>
+                <div class="flex mt-2" style="justify-content:space-between">
+                    <h2>📋 Контесты</h2>
+                    <button class="btn btn-primary btn-sm" id="btn-create" style="display:none" onclick="showPage('create-contest')">+ Создать</button>
+                </div>
+                <div id="contests-list" class="mt-2"></div>
+            </div>
+            <div>
+                <div class="card">
+                    <h3>📡 Лента активности</h3>
+                    <div class="activity-feed mt-2" id="activity-feed"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PROFILE -->
+<div id="page-profile" class="page">
+    <div class="container"><div id="profile-content"></div></div>
+</div>
+
+<!-- CONTEST -->
+<div id="page-contest" class="page">
+    <div class="container">
+        <a href="#" onclick="showPage('home')" class="text-sm text-muted">← Назад</a>
+        <div id="contest-detail" class="mt-2"></div>
+    </div>
+</div>
+
+<!-- PROBLEM -->
+<div id="page-problem" class="page">
+    <div class="container">
+        <a href="#" onclick="showPage('contest'); loadContest(currentContestId)" class="text-sm text-muted">← К контесту</a>
+        <div id="problem-detail" class="mt-2"></div>
+    </div>
+</div>
+
+<!-- RESULT -->
+<div id="page-result" class="page">
+    <div class="container"><div id="result-detail"></div></div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="page-leaderboard" class="page">
+    <div class="container">
+        <a href="#" onclick="showPage('contest'); loadContest(currentContestId)" class="text-sm text-muted">← Назад</a>
+        <div id="leaderboard-detail" class="mt-2"></div>
+    </div>
+</div>
+
+<div id="page-leaderboard-global" class="page">
+    <div class="container">
+        <h2>🏆 Глобальный рейтинг</h2>
+        <div id="global-leaderboard" class="mt-2"></div>
+    </div>
+</div>
+
+<!-- CREATE CONTEST -->
+<div id="page-create-contest" class="page">
+    <div class="container">
+        <a href="#" onclick="showPage('home')" class="text-sm text-muted">← Назад</a>
+        <div class="card mt-2">
+            <h2>Создать контест</h2>
+            <div class="form-group"><label>Название</label><input type="text" id="c-title"></div>
+            <div class="form-group"><label>Описание</label><textarea id="c-desc" rows="3"></textarea></div>
+            <div class="flex">
+                <div class="form-group" style="flex:1"><label>Начало</label><input type="datetime-local" id="c-start"></div>
+                <div class="form-group" style="flex:1"><label>Окончание</label><input type="datetime-local" id="c-end"></div>
+            </div>
+            <button class="btn btn-primary" onclick="createContest()">Создать</button>
+        </div>
+    </div>
+</div>
+
+<!-- CREATE PROBLEM -->
+<div id="page-create-problem" class="page">
+    <div class="container">
+        <a href="#" onclick="showPage('contest'); loadContest(currentContestId)" class="text-sm text-muted">← Назад</a>
+        <div class="card mt-2">
+            <h2>Добавить задачу</h2>
+            <div class="form-group"><label>Название</label><input type="text" id="p-title"></div>
+            <div class="form-group"><label>Условие</label><textarea id="p-desc" rows="4"></textarea></div>
+            <div class="flex">
+                <div class="form-group" style="flex:1"><label>Формат ввода</label><input type="text" id="p-input"></div>
+                <div class="form-group" style="flex:1"><label>Формат вывода</label><input type="text" id="p-output"></div>
+            </div>
+            <div class="flex">
+                <div class="form-group" style="flex:1"><label>Пример ввода</label><textarea id="p-sample-in" rows="2"></textarea></div>
+                <div class="form-group" style="flex:1"><label>Пример вывода</label><textarea id="p-sample-out" rows="2"></textarea></div>
+            </div>
+            <hr class="divider">
+            <div class="form-group">
+                <label>Подсказки (каждая строка — отдельная подсказка)</label>
+                <textarea id="p-hints" rows="3" placeholder="Попробуйте использовать цикл&#10;Вспомните про функцию abs()"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Тесты (ввод | вывод)</label>
+                <textarea id="p-tests" rows="6" placeholder="3 5 | 8&#10;10 20 | 30"></textarea>
+            </div>
+            <div class="flex">
+                <div class="form-group" style="flex:1"><label>Лимит времени (сек)</label><input type="number" id="p-time" value="2" min="0.5" step="0.5"></div>
+                <div class="form-group" style="flex:1"><label>Сложность</label>
+                    <select id="p-diff">
+                        <option value="easy">Лёгкая</option>
+                        <option value="medium" selected>Средняя</option>
+                        <option value="hard">Сложная</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-success" onclick="createProblem()">Добавить задачу</button>
+        </div>
+    </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="auth-modal">
+    <div class="modal">
+        <h2 id="auth-title">Вход</h2>
+        <div class="form-group" id="reg-name-group" style="display:none">
+            <label>Имя пользователя</label>
+            <input type="text" id="auth-name">
+        </div>
+        <div class="form-group"><label>Логин</label><input type="text" id="auth-login"></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="auth-pass"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="doAuth()" id="auth-btn">Войти</button>
+        <p class="text-sm text-muted mt-2" style="text-align:center">
+            <span id="auth-switch-text">Нет аккаунта?</span>
+            <a href="#" onclick="toggleAuthMode()" id="auth-switch-link">Регистрация</a>
+        </p>
+        <p class="text-sm mt-1" style="text-align:center"><a href="#" onclick="closeAuth()">Закрыть</a></p>
+    </div>
+</div>
+
+<script>
+// ==================== ЗВУКОВЫЕ ЭФФЕКТЫ (Web Audio API) ====================
+let audioCtx = null;
+let soundEnabled = true;
+
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+}
+
+function playTone(freq, duration, type = 'sine', volume = 0.15) {
+    if (!soundEnabled) return;
+    initAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+}
+
+function playSuccess() {
+    if (!soundEnabled) return;
+    initAudio();
+    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    notes.forEach((f, i) => setTimeout(() => playTone(f, 0.3, 'triangle', 0.12), i * 100));
+}
+
+function playFail() {
+    if (!soundEnabled) return;
+    initAudio();
+    playTone(220, 0.15, 'sawtooth', 0.1);
+    setTimeout(() => playTone(180, 0.3, 'sawtooth', 0.1), 150);
+}
+
+function playAchievement() {
+    if (!soundEnabled) return;
+    initAudio();
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // арпеджио
+    notes.forEach((f, i) => setTimeout(() => playTone(f, 0.4, 'triangle', 0.15), i * 120));
+}
+
+function playClick() {
+    if (!soundEnabled) return;
+    playTone(800, 0.05, 'square', 0.05);
+}
+
+function playCombo() {
+    if (!soundEnabled) return;
+    initAudio();
+    playTone(600, 0.1, 'square', 0.1);
+    setTimeout(() => playTone(900, 0.15, 'square', 0.1), 80);
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById('sound-toggle').textContent = soundEnabled ? '🔊' : '🔇';
+    if (soundEnabled) playClick();
+}
+
+// ==================== ЧАСТИЦЫ НА ФОНЕ ====================
+const canvas = document.getElementById('particles-bg');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function initParticles() {
+    particles = [];
+    const count = Math.floor((canvas.width * canvas.height) / 15000);
+    for (let i = 0; i < count; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            r: Math.random() * 1.5 + 0.5,
+            hue: Math.random() * 60 + 200, // синий-фиолетовый
+            alpha: Math.random() * 0.5 + 0.2
+        });
+    }
+}
+initParticles();
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 70%, 70%, ${p.alpha})`;
+        ctx.fill();
+    });
+
+    // Линии между близкими частицами
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `hsla(220, 70%, 70%, ${0.15 * (1 - dist / 120)})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+    requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ==================== PYODIDE WORKER ====================
+const workerCode = `
+let pyodide = null;
+self.onmessage = async function(e) {
+    const { type, payload } = e.data;
+    if (type === 'init') {
+        try {
+            self.postMessage({ type: 'status', payload: 'Загрузка Pyodide...' });
+            importScripts('https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js');
+            pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/' });
+            self.postMessage({ type: 'ready' });
+        } catch (err) { self.postMessage({ type: 'error', payload: err.message }); }
+        return;
+    }
+    if (type === 'run') {
+        if (!pyodide) { self.postMessage({ type: 'result', payload: { error: 'Pyodide не загружен', id: payload.id } }); return; }
+        const { code, stdin, id } = payload;
+        try {
+            const stdinLines = (stdin || '').split('\\n');
+            let lineIdx = 0;
+            pyodide.setStdin({ stdin: () => {
+                if (lineIdx < stdinLines.length) return stdinLines[lineIdx++];
+                return null;
+            }});
+            let capturedOut = '', stderr = '';
+            pyodide.setStdout({ batched: (txt) => { capturedOut += txt; } });
+            pyodide.setStderr({ batched: (txt) => { stderr += txt; } });
+            await pyodide.runPythonAsync(code);
+            self.postMessage({ type: 'result', payload: { id, stdout: capturedOut, stderr, success: true } });
+        } catch (err) {
+            self.postMessage({ type: 'result', payload: { id, stdout: '', stderr: err.message || String(err), success: false } });
+        }
+    }
+};
+`;
+const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
+const workerUrl = URL.createObjectURL(workerBlob);
+let pyodideWorker = null;
+let pyodideReady = false;
+let pendingRuns = new Map();
+let runIdCounter = 0;
+
+function initPyodide() {
+    pyodideWorker = new Worker(workerUrl);
+    pyodideWorker.onmessage = (e) => {
+        const { type, payload } = e.data;
+        if (type === 'status') document.getElementById('loader-status').textContent = payload;
+        else if (type === 'ready') {
+            pyodideReady = true;
+            document.getElementById('pyodide-loader').style.display = 'none';
+            const s = document.getElementById('pyodide-status');
+            s.style.display = ''; s.textContent = '✓ Python'; s.style.color = '#34d399';
+        } else if (type === 'error') document.getElementById('loader-status').textContent = 'Ошибка: ' + payload;
+        else if (type === 'result') {
+            const pending = pendingRuns.get(payload.id);
+            if (pending) { clearTimeout(pending.timeout); pendingRuns.delete(payload.id); pending.resolve(payload); }
+        }
+    };
+    pyodideWorker.postMessage({ type: 'init' });
+}
+
+function runPython(code, stdin, timeLimit = 2) {
+    return new Promise((resolve) => {
+        if (!pyodideReady) { resolve({ error: 'Python не загружен', success: false }); return; }
+        const id = ++runIdCounter;
+        const timeout = setTimeout(() => {
+            pendingRuns.delete(id);
+            pyodideWorker.terminate();
+            pyodideWorker = new Worker(workerUrl);
+            pyodideReady = false;
+            pyodideWorker.onmessage = (e) => {
+                const { type, payload } = e.data;
+                if (type === 'ready') {
+                    pyodideReady = true;
+                    const s = document.getElementById('pyodide-status');
+                    s.textContent = '✓ Python'; s.style.color = '#34d399';
+                } else if (type === 'result') {
+                    const p = pendingRuns.get(payload.id);
+                    if (p) { clearTimeout(p.timeout); pendingRuns.delete(payload.id); p.resolve(payload); }
+                }
+            };
+            pyodideWorker.postMessage({ type: 'init' });
+            resolve({ error: 'Time Limit Exceeded', success: false, tle: true });
+        }, timeLimit * 1000);
+        pendingRuns.set(id, { resolve, timeout });
+        pyodideWorker.postMessage({ type: 'run', payload: { code, stdin, id } });
+    });
+}
+
+// ==================== DATA ====================
+const DB_KEY = 'pycontest_db_v4';
+function getDB() { const r = localStorage.getItem(DB_KEY); return r ? JSON.parse(r) : initDB(); }
+function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+const PETS = [
+    { minLevel: 1, emoji: '🐣', name: 'Цыплёнок', phrases: ['Пи-пи!', 'Я новенький!', 'Учи меня!'] },
+    { minLevel: 3, emoji: '🐥', name: 'Кодёнок', phrases: ['Растём!', 'Python — это круто!', 'Ещё задачку!'] },
+    { minLevel: 5, emoji: '🐤', name: 'Питончик', phrases: ['Шипю-шипю!', 'Я уже умею циклы!', 'Давай хардкор!'] },
+    { minLevel: 8, emoji: '🐍', name: 'Змейка', phrases: ['Шшш...', 'Я чувствую баги...', 'Sssssuper!'] },
+    { minLevel: 12, emoji: '🐉', name: 'Дракон', phrases: ['РРРРР!', 'Мои алгоритмы — огонь!', 'Я решаю за O(1)!'] },
+    { minLevel: 18, emoji: '🦄', name: 'Единорог', phrases: ['✨ Магия кода ✨', 'Я вне времени!', 'Unicorn level!'] },
+    { minLevel: 25, emoji: '🌌', name: 'Космо-питон', phrases: ['Я вижу матрицу...', 'Галактический код!', '∞'] }
+];
+
+function getPet(level) {
+    let pet = PETS[0];
+    for (const p of PETS) {
+        if (level >= p.minLevel) pet = p;
+    }
+    return pet;
+}
+
+function initDB() {
+    const db = {
+        users: [
+            { id: 1, name: 'admin', login: 'admin', pass: 'admin', role: 'admin', score: 0, achievements: [], activity: {}, streak: 0, lastActive: null, combo: 0 },
+            { id: 2, name: 'alice', login: 'alice', pass: '123', role: 'user', score: 350, achievements: ['first_solve', 'easy_3'], activity: {}, streak: 3, lastActive: '2026-10-06', combo: 0 },
+            { id: 3, name: 'bob', login: 'bob', pass: '123', role: 'user', score: 200, achievements: ['first_solve'], activity: {}, streak: 1, lastActive: '2026-10-06', combo: 0 },
+            { id: 4, name: 'charlie', login: 'charlie', pass: '123', role: 'user', score: 500, achievements: ['first_solve', 'easy_3', 'medium_3', 'hard_1'], activity: {}, streak: 5, lastActive: '2026-10-06', combo: 0 }
+        ],
+        contests: [{
+            id: 1,
+            title: '🏆 Winter Python Cup 2026',
+            desc: 'Контест с задачами разной сложности. Настоящий Python в браузере!',
+            start: '2026-10-01T10:00',
+            end: '2026-12-31T23:59',
+            problems: [
+                {
+                    id: 1, title: 'Сумма двух чисел', diff: 'easy',
+                    desc: 'Даны два целых числа A и B. Выведите их сумму.',
+                    inputFmt: 'Два целых числа через пробел',
+                    outputFmt: 'Сумма A и B',
+                    sampleIn: '3 5', sampleOut: '8',
+                    timeLimit: 2,
+                    hints: ['Используйте input() и split()', 'Преобразуйте строки в int()', 'print(a + b)'],
+                    tests: [
+                        { inp: '3 5', out: '8' }, { inp: '0 0', out: '0' }, { inp: '-1 1', out: '0' },
+                        { inp: '1000000000 1000000000', out: '2000000000' }, { inp: '-500 300', out: '-200' }
+                    ]
+                },
+                {
+                    id: 2, title: 'Факториал', diff: 'medium',
+                    desc: 'Дано натуральное число N (1 ≤ N ≤ 20). Вычислите N!',
+                    inputFmt: 'Одно число N', outputFmt: 'N!',
+                    sampleIn: '5', sampleOut: '120',
+                    timeLimit: 2,
+                    hints: ['Факториал — произведение чисел от 1 до N', 'Можно использовать цикл for', 'Или рекурсию'],
+                    tests: [
+                        { inp: '1', out: '1' }, { inp: '5', out: '120' }, { inp: '10', out: '3628800' },
+                        { inp: '20', out: '2432902008176640000' }, { inp: '3', out: '6' }
+                    ]
+                },
+                {
+                    id: 3, title: 'Палиндром', diff: 'easy',
+                    desc: 'Дана строка. Определите, является ли она палиндромом (регистр не учитывается). Выведите YES или NO.',
+                    inputFmt: 'Строка', outputFmt: 'YES или NO',
+                    sampleIn: 'Казак', sampleOut: 'YES',
+                    timeLimit: 1,
+                    hints: ['Приведите строку к нижнему регистру', 'Сравните строку с её перевёрнутой версией', 's[::-1] переворачивает строку'],
+                    tests: [
+                        { inp: 'Казак', out: 'YES' }, { inp: 'hello', out: 'NO' }, { inp: 'a', out: 'YES' },
+                        { inp: 'AbBa', out: 'YES' }, { inp: 'Python', out: 'NO' }
+                    ]
+                },
+                {
+                    id: 4, title: 'Максимум из N чисел', diff: 'easy',
+                    desc: 'Дано N, затем N чисел. Найдите максимум. Нельзя использовать max().',
+                    inputFmt: 'Первая строка — N, вторая — N чисел', outputFmt: 'Максимум',
+                    sampleIn: '5\n3 7 2 9 1', sampleOut: '9',
+                    timeLimit: 2,
+                    hints: ['Сохраните первое число как текущий максимум', 'Пройдитесь циклом по остальным', 'Если число больше — обновите максимум'],
+                    tests: [
+                        { inp: '5\n3 7 2 9 1', out: '9' }, { inp: '1\n42', out: '42' },
+                        { inp: '3\n-5 -1 -10', out: '-1' }, { inp: '4\n0 0 0 0', out: '0' }
+                    ]
+                },
+                {
+                    id: 5, title: 'Числа Фибоначчи', diff: 'medium',
+                    desc: 'Дано N (0 ≤ N ≤ 90). Выведите F(N). F(0)=0, F(1)=1.',
+                    inputFmt: 'Число N', outputFmt: 'F(N)',
+                    sampleIn: '10', sampleOut: '55',
+                    timeLimit: 2,
+                    hints: ['F(n) = F(n-1) + F(n-2)', 'Используйте два переменных для хранения последних двух значений', 'Цикл от 2 до N'],
+                    tests: [
+                        { inp: '0', out: '0' }, { inp: '1', out: '1' }, { inp: '10', out: '55' },
+                        { inp: '20', out: '6765' }, { inp: '50', out: '12586269025' }
+                    ]
+                },
+                {
+                    id: 6, title: 'Сортировка', diff: 'hard',
+                    desc: 'Отсортируйте N чисел по возрастанию. Нельзя использовать sort/sorted.',
+                    inputFmt: 'N, затем N чисел', outputFmt: 'Числа через пробел',
+                    sampleIn: '5\n5 3 1 4 2', sampleOut: '1 2 3 4 5',
+                    timeLimit: 3,
+                    hints: ['Попробуйте сортировку пузырьком', 'Внешний цикл — проходы, внутренний — сравнения соседей', 'Если a[i] > a[i+1], меняйте их местами'],
+                    tests: [
+                        { inp: '5\n5 3 1 4 2', out: '1 2 3 4 5' }, { inp: '3\n3 2 1', out: '1 2 3' },
+                        { inp: '1\n42', out: '42' }, { inp: '4\n-1 -5 0 3', out: '-5 -1 0 3' }
+                    ]
+                }
+            ]
+        }],
+        submissions: [],
+        activityFeed: [],
+        achievements: {
+            first_solve:    { icon: '🎯', name: 'Первая кровь',      desc: 'Решить первую задачу',           check: (u, db) => db.submissions.some(s => s.userId === u.id && s.status === 'Accepted') },
+            easy_3:         { icon: '⭐', name: 'Легкоатлет',        desc: 'Решить 3 лёгкие задачи',          check: (u, db) => countSolved(u, db, 'easy') >= 3 },
+            easy_5:         { icon: '🌟', name: 'Мастер лёгких',     desc: 'Решить 5 лёгких задач',           check: (u, db) => countSolved(u, db, 'easy') >= 5 },
+            medium_3:       { icon: '💪', name: 'Средний уровень',   desc: 'Решить 3 средние задачи',         check: (u, db) => countSolved(u, db, 'medium') >= 3 },
+            hard_1:         { icon: '🔥', name: 'Хардкорщик',        desc: 'Решить сложную задачу',           check: (u, db) => countSolved(u, db, 'hard') >= 1 },
+            speed_demon:    { icon: '⚡', name: 'Скорострел',        desc: 'Решить задачу менее чем за 10 сек', check: (u, db) => db.submissions.some(s => s.userId === u.id && s.status === 'Accepted' && parseFloat(s.time) < 10) },
+            perfectionist:  { icon: '💎', name: 'Перфекционист',     desc: '10 Accepted подряд',              check: (u, db) => checkStreak(u, db, 10) },
+            ten_solves:     { icon: '🏅', name: 'Десяточка',         desc: 'Решить 10 задач',                 check: (u, db) => countTotalSolved(u, db) >= 10 },
+            streak_3:       { icon: '🔥', name: 'На огне',           desc: 'Серия 3 дня подряд',              check: (u, db) => (u.streak || 0) >= 3 },
+            streak_7:       { icon: '🌋', name: 'Неделя кода',       desc: 'Серия 7 дней подряд',             check: (u, db) => (u.streak || 0) >= 7 },
+            // Секретные ачивки
+            hello_world:    { icon: '👋', name: 'Hello, World!',     desc: 'Секретная ачивка', secret: true,   check: (u, db) => db.submissions.some(s => s.userId === u.id && s.code && s.code.includes('hello world')) },
+            oneshot:        { icon: '🎯', name: 'С первого раза',    desc: 'Секретная ачивка', secret: true,   check: (u, db) => {
+                const probs = new Set();
+                db.submissions.filter(s => s.userId === u.id).forEach(s => {
+                    if (s.status === 'Accepted' && !probs.has(s.problemId)) {
+                        const prev = db.submissions.filter(x => x.userId === u.id && x.problemId === s.problemId && x.id < s.id);
+                        if (prev.length === 0) probs.add(s.problemId);
+                    }
+                });
+                return probs.size >= 3;
+            }},
+            pythonista:     { icon: '🐍', name: 'Пайтонист',         desc: 'Секретная ачивка', secret: true,   check: (u, db) => db.submissions.some(s => s.userId === u.id && s.code && s.code.includes('def ') && s.status === 'Accepted') },
+            combo_5:        { icon: '💥', name: 'Комбо x5',          desc: 'Секретная ачивка', secret: true,   check: (u, db) => (u.maxCombo || 0) >= 5 }
+        },
+        nextId: { user: 5, contest: 2, problem: 7, sub: 1 }
+    };
+    saveDB(db);
+    return db;
+}
+
+function countSolved(user, db, diff) {
+    const solved = new Set();
+    db.submissions.filter(s => s.userId === user.id && s.status === 'Accepted').forEach(s => {
+        for (const c of db.contests) {
+            const p = c.problems.find(x => x.id === s.problemId);
+            if (p && p.diff === diff) solved.add(p.id);
+        }
+    });
+    return solved.size;
+}
+function countTotalSolved(user, db) {
+    const solved = new Set();
+    db.submissions.filter(s => s.userId === user.id && s.status === 'Accepted').forEach(s => solved.add(s.problemId));
+    return solved.size;
+}
+function checkStreak(user, db, n) {
+    const dates = new Set(db.submissions.filter(s => s.userId === user.id && s.status === 'Accepted').map(s => s.date.split(',')[0].split(' ')[0]));
+    if (dates.size < n) return false;
+    const sorted = [...dates].sort().reverse();
+    for (let i = 0; i < n - 1; i++) {
+        const d1 = new Date(sorted[i]);
+        const d2 = new Date(sorted[i + 1]);
+        const diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+        if (diff !== 1) return false;
+    }
+    return true;
+}
+
+// ==================== AUTH ====================
+let currentUser = null;
+let authMode = 'login';
+let currentContestId = null;
+let currentProblemId = null;
+
+function updateNav() {
+    const el = document.getElementById('nav-auth');
+    const btn = document.getElementById('btn-create');
+    if (currentUser) {
+        const role = currentUser.role === 'admin' ? '👑 ' : '';
+        el.innerHTML = `<span class="nav-user">${role}${currentUser.name}</span> <a href="#" onclick="logout()">Выйти</a>`;
+        btn.style.display = currentUser.role === 'admin' ? '' : 'none';
+    } else {
+        el.innerHTML = `<a href="#" onclick="openAuth()">Войти</a>`;
+        btn.style.display = 'none';
+    }
+}
+function openAuth() { document.getElementById('auth-modal').classList.add('active'); }
+function closeAuth() { document.getElementById('auth-modal').classList.remove('active'); }
+function toggleAuthMode() {
+    authMode = authMode === 'login' ? 'register' : 'login';
+    document.getElementById('auth-title').textContent = authMode === 'login' ? 'Вход' : 'Регистрация';
+    document.getElementById('auth-btn').textContent = authMode === 'login' ? 'Войти' : 'Создать';
+    document.getElementById('reg-name-group').style.display = authMode === 'register' ? '' : 'none';
+    document.getElementById('auth-switch-text').textContent = authMode === 'login' ? 'Нет аккаунта?' : 'Есть аккаунт?';
+    document.getElementById('auth-switch-link').textContent = authMode === 'login' ? 'Регистрация' : 'Войти';
+}
+function doAuth() {
+    const db = getDB();
+    const login = document.getElementById('auth-login').value.trim();
+    const pass = document.getElementById('auth-pass').value;
+    if (authMode === 'login') {
+        const user = db.users.find(u => u.login === login && u.pass === pass);
+        if (!user) { toast('Неверный логин или пароль'); return; }
+        currentUser = user;
+    } else {
+        const name = document.getElementById('auth-name').value.trim();
+        if (!name || !login || !pass) { toast('Заполните все поля'); return; }
+        if (db.users.find(u => u.login === login)) { toast('Логин занят'); return; }
+        const user = { id: db.nextId.user++, name, login, pass, role: 'user', score: 0, achievements: [], activity: {}, streak: 0, lastActive: null, combo: 0, maxCombo: 0 };
+        db.users.push(user);
+        saveDB(db);
+        currentUser = user;
+    }
+    closeAuth();
+    updateNav();
+    renderHome();
+    toast(`Добро пожаловать, ${currentUser.name}!`);
+    playSuccess();
+}
+function logout() { currentUser = null; updateNav(); showPage('home'); renderHome(); }
+
+// ==================== NAVIGATION ====================
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (id === 'home') renderHome();
+    if (id === 'profile') renderProfile();
+    if (id === 'leaderboard-global') renderGlobalLeaderboard();
+    playClick();
+}
+
+// ==================== HOME ====================
+function renderHome() {
+    const db = getDB();
+    const now = new Date();
+    document.getElementById('stat-contests').textContent = db.contests.length;
+    document.getElementById('stat-problems').textContent = db.contests.reduce((s, c) => s + c.problems.length, 0);
+    document.getElementById('stat-users').textContent = db.users.length;
+    document.getElementById('stat-subs').textContent = db.submissions.length;
+
+    renderDailyProblem();
+    renderActivityFeed();
+
+    const list = document.getElementById('contests-list');
+    if (db.contests.length === 0) {
+        list.innerHTML = '<div class="card"><p class="text-muted">Пока нет контестов</p></div>';
+        return;
+    }
+    list.innerHTML = db.contests.map(c => {
+        const start = new Date(c.start), end = new Date(c.end);
+        let badge;
+        if (now >= start && now <= end) badge = '<span class="badge badge-green">● Идёт</span>';
+        else if (now > end) badge = '<span class="badge badge-red">● Завершён</span>';
+        else badge = '<span class="badge badge-yellow">● Скоро</span>';
+        return `
+        <div class="card" style="cursor:pointer" onclick="loadContest(${c.id})">
+            <div class="flex" style="justify-content:space-between">
+                <h2>${c.title}</h2>${badge}
+            </div>
+            <p>${c.desc}</p>
+            <div class="flex mt-2 text-sm text-muted">
+                <span>📅 ${formatDate(c.start)} — ${formatDate(c.end)}</span>
+                <span>📝 ${c.problems.length} задач</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function formatDate(d) {
+    return new Date(d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+}
+
+// ==================== DAILY PROBLEM ====================
+function getDailyProblem() {
+    const db = getDB();
+    const today = new Date();
+    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+    const allProblems = db.contests.flatMap(c => c.problems);
+    if (allProblems.length === 0) return null;
+    return allProblems[dayOfYear % allProblems.length];
+}
+
+function renderDailyProblem() {
+    const slot = document.getElementById('daily-problem-slot');
+    const problem = getDailyProblem();
+    if (!problem) { slot.innerHTML = ''; return; }
+
+    const db = getDB();
+    const solved = currentUser && db.submissions.some(s => s.userId === currentUser.id && s.problemId === problem.id && s.status === 'Accepted');
+
+    slot.innerHTML = `
+        <div class="daily-problem" onclick="loadProblem(${problem.id})" style="cursor:pointer">
+            <span class="daily-badge">✨ Задача дня</span>
+            ${solved ? '<span class="badge badge-green" style="margin-left:0.5rem">✓ Решена</span>' : ''}
+            <div class="daily-title">${problem.title} <span class="daily-bonus">×2 бонус</span></div>
+            <p class="text-sm">${problem.desc.substring(0, 120)}...</p>
+            <div class="flex mt-2">
+                ${problem.diff === 'easy' ? '<span class="badge badge-green">Easy</span>' :
+                  problem.diff === 'medium' ? '<span class="badge badge-yellow">Medium</span>' :
+                  '<span class="badge badge-red">Hard</span>'}
+                <span class="tag">⏱ ${problem.timeLimit}s</span>
+            </div>
+        </div>
+    `;
+}
+
+// ==================== ACTIVITY FEED ====================
+function addActivity(text, userId) {
+    const db = getDB();
+    if (!db.activityFeed) db.activityFeed = [];
+    const user = db.users.find(u => u.id === userId);
+    db.activityFeed.unshift({
+        text,
+        userName: user ? user.name : 'Неизвестный',
+        time: Date.now()
+    });
+    if (db.activityFeed.length > 50) db.activityFeed = db.activityFeed.slice(0, 50);
+    saveDB(db);
+}
+
+function renderActivityFeed() {
+    const db = getDB();
+    const feed = document.getElementById('activity-feed');
+    if (!feed) return;
+
+    // Если лента пустая — добавим немного "живости"
+    if (!db.activityFeed || db.activityFeed.length === 0) {
+        db.activityFeed = [
+            { text: 'решил задачу <strong>Сумма двух чисел</strong>', userName: 'alice', time: Date.now() - 3600000 },
+            { text: 'получил достижение <strong>🔥 На огне</strong>', userName: 'charlie', time: Date.now() - 7200000 },
+            { text: 'зарегистрировался на платформе', userName: 'bob', time: Date.now() - 86400000 }
+        ];
+        saveDB(db);
+    }
+
+    feed.innerHTML = db.activityFeed.slice(0, 10).map(item => {
+        const initial = item.userName.charAt(0).toUpperCase();
+        const timeAgo = getTimeAgo(item.time);
+        return `
+            <div class="activity-item">
+                <div class="activity-avatar">${initial}</div>
+                <div class="activity-text"><strong>${item.userName}</strong> ${item.text}</div>
+                <div class="activity-time">${timeAgo}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function getTimeAgo(timestamp) {
+    const diff = Date.now() - timestamp;
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'только что';
+    if (mins < 60) return `${mins} мин`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours} ч`;
+    const days = Math.floor(hours / 24);
+    return `${days} д`;
+}
+
+// ==================== CONTEST ====================
+let contestTimerInterval = null;
+function loadContest(id) {
+    currentContestId = id;
+    showPage('contest');
+    const db = getDB();
+    const c = db.contests.find(x => x.id === id);
+    if (!c) return;
+
+    const now = new Date();
+    const start = new Date(c.start), end = new Date(c.end);
+    let badge;
+    if (now >= start && now <= end) badge = '<span class="badge badge-green">● Идёт</span>';
+    else if (now > end) badge = '<span class="badge badge-red">● Завершён</span>';
+    else badge = '<span class="badge badge-yellow">● Скоро</span>';
+
+    const isAdmin = currentUser && currentUser.role === 'admin';
+
+    let html = `
+        <div class="card">
+            <div class="flex" style="justify-content:space-between">
+                <h1>${c.title}</h1>${badge}
+            </div>
+            <p>${c.desc}</p>
+            <div id="contest-timer-slot"></div>
+            <div class="flex mt-2">
+                <a href="#" class="btn btn-ghost btn-sm" onclick="loadLeaderboard(${c.id})">🏆 Таблица лидеров</a>
+                ${isAdmin ? `<a href="#" class="btn btn-primary btn-sm" onclick="showPage('create-problem')">+ Добавить задачу</a>` : ''}
+            </div>
+        </div>
+        <h2 class="mt-3">📝 Задачи</h2>`;
+
+    if (c.problems.length === 0) {
+        html += '<div class="card"><p class="text-muted">Задачи пока не добавлены</p></div>';
+    } else {
+        c.problems.forEach((p, i) => {
+            const diffBadge = p.diff === 'easy' ? '<span class="badge badge-green">Easy</span>' :
+                              p.diff === 'medium' ? '<span class="badge badge-yellow">Medium</span>' :
+                              '<span class="badge badge-red">Hard</span>';
+            const solved = currentUser && db.submissions.some(s => s.problemId === p.id && s.userId === currentUser.id && s.status === 'Accepted');
+            const solvedBadge = solved ? ' <span class="badge badge-green">✓</span>' : '';
+            html += `
+            <div class="card" style="cursor:pointer" onclick="loadProblem(${p.id})">
+                <div class="flex" style="justify-content:space-between">
+                    <h3>${String.fromCharCode(65 + i)}. ${p.title}${solvedBadge}</h3>
+                    <div class="flex">${diffBadge} <span class="tag">⏱ ${p.timeLimit}s</span></div>
+                </div>
+            </div>`;
+        });
+    }
+    document.getElementById('contest-detail').innerHTML = html;
+    startContestTimer(c);
+}
+
+function startContestTimer(contest) {
+    if (contestTimerInterval) clearInterval(contestTimerInterval);
+    const slot = document.getElementById('contest-timer-slot');
+    if (!slot) return;
+    const update = () => {
+        const now = new Date();
+        const start = new Date(contest.start);
+        const end = new Date(contest.end);
+        let html = '';
+        if (now < start) {
+            const diff = start - now;
+            html = `<div class="contest-timer"><span class="timer-icon">⏳</span><div><div class="text-sm text-muted">До начала</div><div class="timer-text">${formatDuration(diff)}</div></div></div>`;
+        } else if (now <= end) {
+            const diff = end - now;
+            html = `<div class="contest-timer"><span class="timer-icon">🔥</span><div><div class="text-sm text-muted">Осталось</div><div class="timer-text">${formatDuration(diff)}</div></div></div>`;
+        } else {
+            html = `<div class="contest-timer"><span class="timer-icon">🏁</span><div><div class="text-sm text-muted">Контест завершён</div></div></div>`;
+        }
+        slot.innerHTML = html;
+    };
+    update();
+    contestTimerInterval = setInterval(update, 1000);
+}
+
+function formatDuration(ms) {
+    if (ms < 0) return '00:00:00';
+    const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+    const h = Math.floor((ms / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((ms / (1000 * 60)) % 60);
+    const s = Math.floor((ms / 1000) % 60);
+    if (d > 0) return `${d}д ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// ==================== PROBLEM ====================
+function loadProblem(id) {
+    currentProblemId = id;
+    showPage('problem');
+    const db = getDB();
+    let problem = null;
+    for (const c of db.contests) {
+        const p = c.problems.find(x => x.id === id);
+        if (p) { problem = p; break; }
+    }
+    if (!problem) return;
+
+    const subs = currentUser ? db.submissions.filter(s => s.problemId === id && s.userId === currentUser.id) : [];
+
+    let html = `
+    <div class="problem-grid">
+        <div>
+            <div class="card">
+                <h2>${problem.title}</h2>
+                <div class="flex mt-1">
+                    ${problem.diff === 'easy' ? '<span class="badge badge-green">Easy</span>' :
+                      problem.diff === 'medium' ? '<span class="badge badge-yellow">Medium</span>' :
+                      '<span class="badge badge-red">Hard</span>'}
+                    <span class="tag">⏱ ${problem.timeLimit}s</span>
+                    <span class="tag">🧪 ${problem.tests.length} тестов</span>
+                </div>
+                <hr class="divider">
+                <p style="white-space:pre-wrap">${problem.desc}</p>
+                <hr class="divider">
+                <p class="text-sm"><strong>Ввод:</strong> ${problem.inputFmt}</p>
+                <p class="text-sm"><strong>Вывод:</strong> ${problem.outputFmt}</p>
+                <hr class="divider">
+                <p class="text-sm text-muted">Пример ввода:</p>
+                <div class="sample-block">${problem.sampleIn}</div>
+                <p class="text-sm text-muted mt-1">Пример вывода:</p>
+                <div class="sample-block">${problem.sampleOut}</div>
+            </div>
+        </div>
+        <div>
+            <div class="card">
+                <h3>💻 Решение</h3>
+                ${currentUser ? `
+                <div class="code-editor mt-2">
+                    <div class="code-editor-header">
+                        <span>solution.py</span>
+                        <span>Python 3 (Pyodide)</span>
+                    </div>
+                    <textarea id="code-input" spellcheck="false" placeholder="# Напишите ваше решение здесь..."></textarea>
+                </div>
+                <div class="flex mt-2">
+                    <button class="btn btn-success" id="btn-submit" onclick="submitSolution(${problem.id})">▶ Отправить</button>
+                    <button class="btn btn-ghost" onclick="runSample(${problem.id})">🧪 Тест на примере</button>
+                </div>
+                <div id="run-output" class="mt-2"></div>
+                ` : `<div class="card" style="text-align:center; padding:3rem"><p>Войдите, чтобы отправить решение</p><button class="btn btn-primary mt-2" onclick="openAuth()">Войти</button></div>`}
+            </div>
+
+            ${problem.hints && problem.hints.length > 0 && currentUser ? `
+            <div class="card">
+                <h3>💡 Подсказки</h3>
+                <p class="text-sm text-muted">Открывайте подсказки за очки. Каждая следующая дороже!</p>
+                <div id="hints-container" class="mt-2">
+                    ${problem.hints.map((h, i) => {
+                        const cost = (i + 1) * 10;
+                        const unlocked = currentUser.hintsUnlocked && currentUser.hintsUnlocked.includes(`${problem.id}-${i}`);
+                        return renderHint(problem.id, i, h, cost, unlocked);
+                    }).join('')}
+                </div>
+            </div>` : ''}
+
+            ${subs.length > 0 ? `
+            <div class="card">
+                <h3>📊 Ваши отправки</h3>
+                <table class="mt-1">
+                    <tr><th>Время</th><th>Статус</th><th>Тесты</th></tr>
+                    ${subs.slice(-10).reverse().map(s => `
+                    <tr>
+                        <td class="text-sm">${s.date}</td>
+                        <td class="status-${statusClass(s.status)}">${s.status}</td>
+                        <td class="text-sm">${s.passed}/${s.total}</td>
+                    </tr>`).join('')}
+                </table>
+            </div>` : ''}
+        </div>
+    </div>`;
+    document.getElementById('problem-detail').innerHTML = html;
+}
+
+function renderHint(problemId, idx, text, cost, unlocked) {
+    if (unlocked) {
+        return `<div class="hint-box"><div class="hint-header"><strong>💡 Подсказка ${idx + 1}</strong></div><p class="text-sm">${text}</p></div>`;
+    }
+    return `
+        <div class="hint-box locked" id="hint-${problemId}-${idx}">
+            <div class="hint-header">
+                <strong>💡 Подсказка ${idx + 1}</strong>
+                <button class="btn btn-sm btn-primary" onclick="unlockHint(${problemId}, ${idx}, ${cost})">
+                    🔓 Открыть за ${cost} очков
+                </button>
+            </div>
+            <p class="text-sm">${text}</p>
+        </div>
+    `;
+}
+
+function unlockHint(problemId, idx, cost) {
+    if (!currentUser) return;
+    const db = getDB();
+    const user = db.users.find(u => u.id === currentUser.id);
+    if (user.score < cost) {
+        toast('Недостаточно очков!');
+        playFail();
+        return;
+    }
+    user.score -= cost;
+    currentUser.score = user.score;
+    if (!currentUser.hintsUnlocked) currentUser.hintsUnlocked = [];
+    currentUser.hintsUnlocked.push(`${problemId}-${idx}`);
+    saveDB(db);
+    toast(`Подсказка открыта! -${cost} очков`);
+    playClick();
+    loadProblem(problemId);
+}
+
+function statusClass(s) {
+    if (s === 'Accepted') return 'accepted';
+    if (s === 'Wrong Answer') return 'wa';
+    if (s === 'TLE') return 'tle';
+    if (s === 'Runtime Error') return 're';
+    return 'pending';
+}
+
+// ==================== JUDGE ====================
+function normalizeOutput(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).split('\n').map(l => l.trimEnd()).join('\n').trimEnd();
+}
+
+async function runTests(code, problem) {
+    const results = [];
+    for (let i = 0; i < problem.tests.length; i++) {
+        const test = problem.tests[i];
+        const t0 = performance.now();
+        const res = await runPython(code, test.inp, problem.timeLimit);
+        const elapsed = ((performance.now() - t0) / 1000).toFixed(3);
+        if (res.tle) {
+            results.push({ status: 'TLE', test: i, expected: test.out, actual: '', error: 'TLE', time: elapsed });
+            return { results, finalStatus: 'TLE' };
+        }
+        if (!res.success) {
+            results.push({ status: 'RE', test: i, expected: test.out, actual: '', error: res.stderr || res.error, time: elapsed });
+            return { results, finalStatus: 'Runtime Error' };
+        }
+        const actual = normalizeOutput(res.stdout);
+        const expected = normalizeOutput(test.out);
+        if (actual === expected) {
+            results.push({ status: 'OK', test: i, expected, actual, time: elapsed });
+        } else {
+            results.push({ status: 'WA', test: i, expected, actual, time: elapsed });
+            return { results, finalStatus: 'Wrong Answer' };
+        }
+    }
+    return { results, finalStatus: 'Accepted' };
+}
+
+// ==================== FLOATING POINTS ====================
+function showFloatingPoints(points, x, y) {
+    const el = document.createElement('div');
+    el.className = 'floating-points';
+    el.textContent = `+${points}`;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.color = points >= 100 ? '#fbbf24' : '#34d399';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+}
+
+// ==================== COMBO ====================
+function updateCombo(accepted) {
+    if (!currentUser) return;
+    const db = getDB();
+    const user = db.users.find(u => u.id === currentUser.id);
+
+    if (accepted) {
+        user.combo = (user.combo || 0) + 1;
+        if (!user.maxCombo || user.combo > user.maxCombo) user.maxCombo = user.combo;
+        currentUser.combo = user.combo;
+        currentUser.maxCombo = user.maxCombo;
+    } else {
+        user.combo = 0;
+        currentUser.combo = 0;
+    }
+    saveDB(db);
+    showComboIndicator();
+}
+
+function getComboMultiplier(combo) {
+    if (combo >= 10) return 3.0;
+    if (combo >= 7) return 2.5;
+    if (combo >= 5) return 2.0;
+    if (combo >= 3) return 1.5;
+    if (combo >= 2) return 1.2;
+    return 1.0;
+}
+
+function showComboIndicator() {
+    const indicator = document.getElementById('combo-indicator');
+    if (!currentUser || currentUser.combo < 2) {
+        indicator.classList.remove('active');
+        return;
+    }
+    indicator.classList.add('active');
+    document.getElementById('combo-num').textContent = currentUser.combo;
+    document.getElementById('combo-mult').textContent = `×${getComboMultiplier(currentUser.combo).toFixed(1)}`;
+    playCombo();
+}
+
+async function submitSolution(problemId) {
+    if (!currentUser) { openAuth(); return; }
+    if (!pyodideReady) { toast('Python ещё загружается'); return; }
+    const code = document.getElementById('code-input').value;
+    if (!code.trim()) { toast('Напишите код!'); return; }
+
+    const db = getDB();
+    let problem = null;
+    for (const c of db.contests) {
+        const p = c.problems.find(x => x.id === problemId);
+        if (p) { problem = p; break; }
+    }
+    if (!problem) return;
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true; btn.textContent = '⏳ Проверяется...';
+
+    try {
+        const { results, finalStatus } = await runTests(code, problem);
+        const passed = results.filter(r => r.status === 'OK').length;
+        const totalTime = results.reduce((s, r) => s + parseFloat(r.time), 0).toFixed(3);
+        const accepted = finalStatus === 'Accepted';
+
+        // Звук
+        if (accepted) playSuccess(); else playFail();
+
+        const sub = {
+            id: db.nextId.sub++,
+            userId: currentUser.id,
+            problemId,
+            status: finalStatus,
+            passed, total: problem.tests.length,
+            time: totalTime + 's',
+            date: new Date().toLocaleString('ru-RU'),
+            code: code
+        };
+        db.submissions.push(sub);
+
+        // Активность
+        updateActivity(db, currentUser, accepted);
+
+        // Комбо
+        updateCombo(accepted);
+
+        // Очки
+        if (accepted) {
+            const user = db.users.find(u => u.id === currentUser.id);
+            const alreadySolved = db.submissions.some(s =>
+                s.userId === currentUser.id && s.problemId === problemId &&
+                s.status === 'Accepted' && s.id !== sub.id
+            );
+            if (!alreadySolved) {
+                let basePoints = problem.diff === 'easy' ? 50 : problem.diff === 'medium' ? 100 : 200;
+
+                // Задача дня — ×2
+                const daily = getDailyProblem();
+                if (daily && daily.id === problemId) basePoints *= 2;
+
+                // Комбо-множитель
+                const mult = getComboMultiplier(currentUser.combo);
+                const points = Math.floor(basePoints * mult);
+
+                user.score += points;
+                currentUser.score = user.score;
+
+                // Floating points
+                const rect = btn.getBoundingClientRect();
+                showFloatingPoints(points, rect.left, rect.top);
+            }
+
+            addActivity(`решил задачу <strong>${problem.title}</strong>`, currentUser.id);
+        } else {
+            addActivity(`отправил решение на <strong>${problem.title}</strong> (${finalStatus})`, currentUser.id);
+        }
+
+        saveDB(db);
+        checkAchievements(db, currentUser);
+
+        if (accepted) launchConfetti();
+
+        showResult(problem, { finalStatus, results, passed, total: problem.tests.length, time: totalTime }, sub);
+    } catch (err) {
+        toast('Ошибка: ' + err.message);
+    } finally {
+        btn.disabled = false; btn.textContent = '▶ Отправить';
+    }
+}
+
+function updateActivity(db, user, accepted) {
+    const today = new Date().toISOString().split('T')[0];
+    if (!user.activity) user.activity = {};
+    user.activity[today] = (user.activity[today] || 0) + (accepted ? 1 : 0);
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    if (user.lastActive === today) {
+        // уже сегодня
+    } else if (user.lastActive === yesterday) {
+        user.streak = (user.streak || 0) + 1;
+    } else {
+        user.streak = 1;
+    }
+    user.lastActive = today;
+    currentUser.streak = user.streak;
+    currentUser.activity = user.activity;
+}
+
+function checkAchievements(db, user) {
+    const freshUser = db.users.find(u => u.id === user.id);
+    if (!freshUser.achievements) freshUser.achievements = [];
+
+    for (const [key, ach] of Object.entries(db.achievements)) {
+        if (!freshUser.achievements.includes(key) && ach.check(freshUser, db)) {
+            freshUser.achievements.push(key);
+            currentUser.achievements = freshUser.achievements;
+            showAchievementPopup(ach);
+            playAchievement();
+            launchConfetti();
+            addActivity(`получил достижение <strong>${ach.icon} ${ach.name}</strong>`, user.id);
+        }
+    }
+    saveDB(db);
+}
+
+function showAchievementPopup(ach) {
+    const popup = document.createElement('div');
+    popup.className = 'achievement-popup' + (ach.secret ? ' secret' : '');
+    popup.innerHTML = `
+        <div class="achievement-popup-header">
+            <div class="achievement-popup-icon">${ach.icon}</div>
+            <div>
+                <div class="achievement-popup-title">${ach.secret ? '🤫 Секретная ачивка!' : '🎉 Новое достижение!'}</div>
+                <div class="achievement-popup-name">${ach.name}</div>
+            </div>
+        </div>
+        <div class="achievement-popup-desc">${ach.desc}</div>
+    `;
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 4500);
+}
+
+// ==================== CONFETTI ====================
+function launchConfetti() {
+    const colors = ['#fbbf24', '#34d399', '#60a5fa', '#c084fc', '#f87171', '#fb923c', '#f472b6'];
+    for (let i = 0; i < 100; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.top = '-20px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.width = (Math.random() * 8 + 6) + 'px';
+        c.style.height = (Math.random() * 8 + 6) + 'px';
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        c.style.transform = `rotate(${Math.random() * 360}deg)`;
+        document.body.appendChild(c);
+        const duration = Math.random() * 2000 + 2000;
+        const xDrift = (Math.random() - 0.5) * 400;
+        c.animate([
+            { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+            { transform: `translate(${xDrift}px, 100vh) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+        ], { duration, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' });
+        setTimeout(() => c.remove(), duration);
+    }
+}
+
+async function runSample(problemId) {
+    if (!pyodideReady) { toast('Python загружается'); return; }
+    const code = document.getElementById('code-input').value;
+    if (!code.trim()) { toast('Напишите код!'); return; }
+    const db = getDB();
+    let problem = null;
+    for (const c of db.contests) {
+        const p = c.problems.find(x => x.id === problemId);
+        if (p) { problem = p; break; }
+    }
+    if (!problem) return;
+    const out = document.getElementById('run-output');
+    out.innerHTML = '<div class="test-result">⏳ Выполняется...</div>';
+    const t0 = performance.now();
+    const res = await runPython(code, problem.sampleIn, problem.timeLimit);
+    const elapsed = ((performance.now() - t0) / 1000).toFixed(3);
+    if (res.tle) { out.innerHTML = `<div class="test-result err">⏱ TLE (${problem.timeLimit}s)</div>`; return; }
+    if (!res.success) { out.innerHTML = `<div class="test-result err">❌ RE<br><pre style="color:#fb923c">${escapeHtml(res.stderr)}</pre></div>`; return; }
+    const actual = normalizeOutput(res.stdout);
+    const expected = normalizeOutput(problem.sampleOut);
+    const ok = actual === expected;
+    out.innerHTML = `
+        <div class="test-result ${ok ? 'pass' : 'fail'}">
+            ${ok ? '✅' : '❌'} ${ok ? 'Совпадает' : 'НЕ совпадает'} (${elapsed}s)
+            <div style="margin-top:0.5rem">
+                <div><strong>Ожидалось:</strong> <code>${escapeHtml(expected) || '<em>пусто</em>'}</code></div>
+                <div><strong>Получено:</strong> <code>${escapeHtml(actual) || '<em>пусто</em>'}</code></div>
+            </div>
+        </div>`;
+}
+
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function showResult(problem, judgeResult, sub) {
+    showPage('result');
+    const ok = judgeResult.finalStatus === 'Accepted';
+    let html = `
+        <div class="card">
+            <div class="result-box ${ok ? 'ok' : 'fail'}">
+                <h3>${ok ? '✅ Accepted!' : '❌ ' + judgeResult.finalStatus}</h3>
+                <p>Пройдено тестов: ${judgeResult.passed} / ${judgeResult.total}</p>
+                <p>Суммарное время: ${judgeResult.time}s</p>
+                ${currentUser && currentUser.combo >= 2 ? `<p style="margin-top:0.5rem; color:#fbbf24; font-weight:700">🔥 COMBO ×${currentUser.combo} (множитель ×${getComboMultiplier(currentUser.combo).toFixed(1)})</p>` : ''}
+            </div>
+            <h3 class="mt-3">Детали по тестам</h3>
+            <div class="mt-2">`;
+    judgeResult.results.forEach((r, i) => {
+        const cls = r.status === 'OK' ? 'pass' : r.status === 'WA' ? 'fail' : 'err';
+        const icon = r.status === 'OK' ? '✅' : r.status === 'WA' ? '❌' : r.status === 'TLE' ? '⏱' : '💥';
+        html += `
+            <div class="test-result ${cls}">
+                <strong>${icon} Тест #${i + 1}</strong> — ${r.status} (${r.time}s)
+                ${r.status !== 'OK' ? `
+                    <div style="margin-top:0.5rem">
+                        <div><strong>Ввод:</strong> <code>${escapeHtml(problem.tests[i].inp)}</code></div>
+                        <div><strong>Ожидалось:</strong> <code>${escapeHtml(r.expected) || '<em>пусто</em>'}</code></div>
+                        <div><strong>Получено:</strong> <code>${escapeHtml(r.actual) || '<em>пусто</em>'}</code></div>
+                        ${r.error ? `<div style="color:#fb923c"><strong>Ошибка:</strong> <code>${escapeHtml(r.error).substring(0, 300)}</code></div>` : ''}
+                    </div>` : ''}
+            </div>`;
+    });
+    html += `</div>
+        <div class="flex mt-3">
+            <button class="btn btn-primary" onclick="loadProblem(${problem.id})">← К задаче</button>
+            <button class="btn btn-ghost" onclick="loadContest(${currentContestId})">К контесту</button>
+        </div>
+    </div>`;
+    document.getElementById('result-detail').innerHTML = html;
+}
+
+// ==================== PROFILE ====================
+function renderProfile() {
+    const el = document.getElementById('profile-content');
+    if (!currentUser) {
+        el.innerHTML = `<div class="card" style="text-align:center; padding:3rem"><p>Войдите, чтобы увидеть профиль</p><button class="btn btn-primary mt-2" onclick="openAuth()">Войти</button></div>`;
+        return;
+    }
+    const db = getDB();
+    const user = db.users.find(u => u.id === currentUser.id);
+    const totalProblems = db.contests.reduce((s, c) => s + c.problems.length, 0);
+    const solved = countTotalSolved(user, db);
+    const progress = totalProblems > 0 ? (solved / totalProblems * 100) : 0;
+    const heatmap = renderHeatmap(user.activity || {});
+
+    const level = Math.floor(user.score / 100) + 1;
+    const xpInLevel = user.score % 100;
+    const pet = getPet(level);
+    const petPhrase = pet.phrases[Math.floor(Math.random() * pet.phrases.length)];
+
+    const achHtml = Object.entries(db.achievements).map(([key, ach]) => {
+        const unlocked = user.achievements && user.achievements.includes(key);
+        const secretClass = ach.secret ? ' secret' : '';
+        const displayName = (ach.secret && !unlocked) ? '???' : ach.name;
+        const displayDesc = (ach.secret && !unlocked) ? 'Секретная ачивка' : ach.desc;
+        const displayIcon = (ach.secret && !unlocked) ? '🔒' : ach.icon;
+        return `
+            <div class="achievement ${unlocked ? 'unlocked' : 'locked'}${secretClass}" title="${displayDesc}">
+                ${ach.secret ? '<span class="achievement-secret-tag">SECRET</span>' : ''}
+                <div class="achievement-icon">${displayIcon}</div>
+                <div class="achievement-name">${displayName}</div>
+                <div class="achievement-desc">${displayDesc}</div>
+            </div>`;
+    }).join('');
+
+    el.innerHTML = `
+        <div class="card">
+            <div class="flex" style="justify-content:space-between; align-items:center">
+                <div>
+                    <h1 style="font-size:2rem">${user.name} ${user.role === 'admin' ? '👑' : ''}</h1>
+                    <div class="flex mt-1">
+                        <span class="level-badge">⚔️ Уровень ${level}</span>
+                        <span class="tag">🏆 ${user.score} очков</span>
+                        ${user.streak > 0 ? `<span class="streak-box"><span style="font-size:1.5rem">🔥</span><div><div class="streak-num">${user.streak}</div><div class="text-sm" style="color:#fdba74">дней подряд</div></div></span>` : ''}
+                        ${user.maxCombo >= 2 ? `<span class="tag" style="background:#7f1d1d; color:#f87171">💥 Макс. комбо: ${user.maxCombo}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+            <div class="progress-container mt-2">
+                <div class="flex" style="justify-content:space-between">
+                    <span class="text-sm">Прогресс уровня ${level}</span>
+                    <span class="text-sm text-muted">${xpInLevel}/100 XP</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${xpInLevel}%"></div></div>
+            </div>
+        </div>
+
+        <div class="pet-container" onclick="petClick()">
+            <div class="pet-emoji" id="pet-emoji">${pet.emoji}</div>
+            <div class="pet-name">${pet.name}</div>
+            <div class="pet-level">Уровень ${level} • Эволюция ${PETS.indexOf(pet) + 1}/${PETS.length}</div>
+            <div class="pet-bubble" id="pet-bubble">${petPhrase}</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card"><div class="num">${solved}</div><div class="label">Решено задач</div></div>
+            <div class="stat-card"><div class="num">${db.submissions.filter(s => s.userId === user.id).length}</div><div class="label">Всего отправок</div></div>
+            <div class="stat-card"><div class="num">${user.achievements ? user.achievements.length : 0}/${Object.keys(db.achievements).length}</div><div class="label">Ачивок</div></div>
+            <div class="stat-card"><div class="num">${user.combo || 0} 🔥</div><div class="label">Текущее комбо</div></div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Общий прогресс</h2>
+            <div class="progress-container">
+                <div class="flex" style="justify-content:space-between">
+                    <span>Решено ${solved} из ${totalProblems} задач</span>
+                    <span class="text-muted">${progress.toFixed(0)}%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📅 Активность за год</h2>
+            <p class="text-sm text-muted">Каждая клетка — день. Цвет показывает количество решённых задач.</p>
+            ${heatmap}
+        </div>
+
+        <div class="card">
+            <h2>🏆 Достижения</h2>
+            <p class="text-sm text-muted">Обычные и секретные ачивки. Секретные — открываются особыми действиями!</p>
+            <div class="achievements-grid">${achHtml}</div>
+        </div>
+    `;
+}
+
+function petClick() {
+    const emoji = document.getElementById('pet-emoji');
+    const bubble = document.getElementById('pet-bubble');
+    if (!emoji || !bubble) return;
+    emoji.style.animation = 'none';
+    setTimeout(() => emoji.style.animation = 'petBounce 2s ease-in-out infinite', 10);
+    const level = Math.floor((currentUser?.score || 0) / 100) + 1;
+    const pet = getPet(level);
+    const phrases = [...pet.phrases, 'Клик-клик!', 'Мне нравится!', 'Ещё! Ещё!', 'Я тебя люблю!', '*счастливый звук*'];
+    bubble.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    bubble.style.animation = 'none';
+    setTimeout(() => bubble.style.animation = 'bubblePop 0.3s ease', 10);
+    playClick();
+}
+
+function renderHeatmap(activity) {
+    const today = new Date();
+    const cells = [];
+    for (let i = 364; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const key = d.toISOString().split('T')[0];
+        const count = activity[key] || 0;
+        let level = 0;
+        if (count >= 4) level = 4;
+        else if (count >= 3) level = 3;
+        else if (count >= 2) level = 2;
+        else if (count >= 1) level = 1;
+        cells.push(`<div class="heatmap-day level-${level}" title="${key}: ${count} задач"></div>`);
+    }
+    return `<div class="heatmap">${cells.join('')}</div>`;
+}
+
+// ==================== LEADERBOARD ====================
+function loadLeaderboard(contestId) {
+    currentContestId = contestId;
+    showPage('leaderboard');
+    const db = getDB();
+    const c = db.contests.find(x => x.id === contestId);
+    if (!c) return;
+    const pIds = c.problems.map(p => p.id);
+    const userMap = {};
+    db.submissions.filter(s => pIds.includes(s.problemId) && s.status === 'Accepted').forEach(s => {
+        if (!userMap[s.userId]) userMap[s.userId] = { user: db.users.find(x => x.id === s.userId), solved: new Set() };
+        userMap[s.userId].solved.add(s.problemId);
+    });
+    const rows = Object.values(userMap).sort((a, b) => b.solved.size - a.solved.size);
+    let html = `
+        <div class="card">
+            <h2>🏆 ${c.title}</h2>
+            <table class="mt-2">
+                <tr><th>#</th><th>Участник</th><th>Решено</th><th>Из</th></tr>
+                ${rows.length === 0 ? '<tr><td colspan="4" class="text-muted">Пока нет результатов</td></tr>' : ''}
+                ${rows.map((r, i) => `
+                <tr>
+                    <td>${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</td>
+                    <td><strong>${r.user.name}</strong></td>
+                    <td class="status-accepted">${r.solved.size}</td>
+                    <td>${c.problems.length}</td>
+                </tr>`).join('')}
+            </table>
+        </div>`;
+    document.getElementById('leaderboard-detail').innerHTML = html;
+}
+
+function renderGlobalLeaderboard() {
+    const db = getDB();
+    const users = [...db.users].sort((a, b) => b.score - a.score);
+    let html = `
+        <div class="card">
+            <table>
+                <tr><th>#</th><th>Участник</th><th>Уровень</th><th>Очки</th><th>Серия</th><th>Макс. комбо</th></tr>
+                ${users.map((u, i) => `
+                <tr>
+                    <td>${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</td>
+                    <td><strong>${u.name}</strong> ${u.role === 'admin' ? '👑' : ''}</td>
+                    <td><span class="level-badge" style="font-size:0.75rem">Lv ${Math.floor(u.score/100)+1}</span></td>
+                    <td class="status-accepted">${u.score}</td>
+                    <td>${u.streak > 0 ? `🔥 ${u.streak}` : '—'}</td>
+                    <td>${u.maxCombo >= 2 ? `💥 ${u.maxCombo}` : '—'}</td>
+                </tr>`).join('')}
+            </table>
+        </div>`;
+    document.getElementById('global-leaderboard').innerHTML = html;
+}
+
+// ==================== CREATE ====================
+function createContest() {
+    if (!currentUser || currentUser.role !== 'admin') { toast('Нет прав'); return; }
+    const title = document.getElementById('c-title').value.trim();
+    const desc = document.getElementById('c-desc').value.trim();
+    const start = document.getElementById('c-start').value;
+    const end = document.getElementById('c-end').value;
+    if (!title || !start || !end) { toast('Заполните все поля'); return; }
+    const db = getDB();
+    const contest = { id: db.nextId.contest++, title, desc, start, end, problems: [] };
+    db.contests.push(contest);
+    saveDB(db);
+    toast('Контест создан!');
+    currentContestId = contest.id;
+    showPage('contest');
+    loadContest(contest.id);
+}
+
+function createProblem() {
+    if (!currentUser || currentUser.role !== 'admin') { toast('Нет прав'); return; }
+    const title = document.getElementById('p-title').value.trim();
+    const desc = document.getElementById('p-desc').value.trim();
+    const inputFmt = document.getElementById('p-input').value.trim();
+    const outputFmt = document.getElementById('p-output').value.trim();
+    const sampleIn = document.getElementById('p-sample-in').value.trim();
+    const sampleOut = document.getElementById('p-sample-out').value.trim();
+    const timeLimit = parseFloat(document.getElementById('p-time').value) || 2;
+    const diff = document.getElementById('p-diff').value;
+    const testsRaw = document.getElementById('p-tests').value.trim();
+    const hintsRaw = document.getElementById('p-hints').value.trim();
+    if (!title || !desc) { toast('Заполните название и условие'); return; }
+    const tests = testsRaw.split('\n').filter(l => l.includes('|')).map(l => {
+        const parts = l.split('|');
+        return { inp: parts[0].trim(), out: parts.slice(1).join('|').trim() };
+    }).filter(t => t.inp !== '' || t.out !== '');
+    if (tests.length === 0) tests.push({ inp: sampleIn, out: sampleOut });
+    const hints = hintsRaw.split('\n').map(s => s.trim()).filter(s => s);
+    const db = getDB();
+    const contest = db.contests.find(c => c.id === currentContestId);
+    if (!contest) { toast('Контест не найден'); return; }
+    contest.problems.push({
+        id: db.nextId.problem++, title, desc,
+        inputFmt: inputFmt || '—', outputFmt: outputFmt || '—',
+        sampleIn, sampleOut, timeLimit, diff, tests, hints
+    });
+    saveDB(db);
+    toast('Задача добавлена!');
+    loadContest(currentContestId);
+}
+
+// ==================== TOAST & MISC ====================
+function toast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.target.id === 'code-input' && e.key === 'Tab') {
+        e.preventDefault();
+        const ta = e.target;
+        const start = ta.selectionStart, end = ta.selectionEnd;
+        ta.value = ta.value.substring(0, start) + '    ' + ta.value.substring(end);
+        ta.selectionStart = ta.selectionEnd = start + 4;
+    }
+});
+
+// ==================== INIT ====================
+updateNav();
+renderHome();
+initPyodide();
+
+// Инициализация аудио при первом клике
+document.body.addEventListener('click', () => initAudio(), { once: true });
+</script>
+
+</body>
+</html>
